@@ -1,10 +1,13 @@
 import whisper
 import tempfile
+import os
+os.environ["FFMPEG_BINARY"] = "ffmpeg"
 
-model = whisper.load_model("small")  # keep it fast & realistic
+model = whisper.load_model("small",device = "cpu")  # keep it fast & realistic
 
 def transcribe_audio(uploaded_file):
-    with tempfile.NamedTemporaryFile(delete=False, suffix=".mp3") as tmp:
+    suffix = ".wav" if uploaded_file.type == "audio/wav" else ".mp3"
+    with tempfile.NamedTemporaryFile(delete=False, suffix=suffix) as tmp:
         tmp.write(uploaded_file.read())
         tmp_path = tmp.name
 
